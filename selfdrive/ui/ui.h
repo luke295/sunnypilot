@@ -118,6 +118,9 @@ typedef struct UIScene {
   line_vertices_data lane_line_vertices[4];
   line_vertices_data road_edge_vertices[2];
 
+  float lane_blindspot_probs[2];
+  line_vertices_data lane_blindspot_vertices[2];
+
   // lead
   QPointF lead_vertices[2];
 

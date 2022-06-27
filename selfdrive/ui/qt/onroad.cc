@@ -318,6 +318,12 @@ void NvgWindow::updateState(const UIState &s) {
     set_speed *= KM_TO_MILE;
   }
 
+  bool enable_bsm = sm["carParams"].getCarParams().getEnableBsm();
+  bool blind_right = sm["carState"].getCarState().getRightBlindspot();
+  bool blind_left = sm["carState"].getCarState().getLeftBlindspot();
+  bool blink_right = sm["carState"].getCarState().getRightBlinker();
+  bool blink_left = sm["carState"].getCarState().getLeftBlinker();
+
   float cur_speed = cs_alive ? std::max<float>(0.0, sm["carState"].getCarState().getVEgo()) : 0.0;
   cur_speed  *= s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH;
 
@@ -340,6 +346,12 @@ void NvgWindow::updateState(const UIState &s) {
   setProperty("latActive", sm["carState"].getCarState().getLatActive());
   setProperty("madsEnabled", sm["carState"].getCarState().getMadsEnabled());
   setProperty("is_brakelight_on", sm["carState"].getCarState().getBrakeLights());
+
+  setProperty("enableBsm", enable_bsm);
+  setProperty("blindRight", blind_right);
+  setProperty("blindLeft", blind_left);
+  setProperty("blinkRight", blink_right);
+  setProperty("blinkLeft", blink_left);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -461,6 +473,10 @@ void NvgWindow::drawHud(QPainter &p) {
   QString speedLimitStrSlc = showSpeedLimit ? QString::number(std::nearbyint(speedLimit)) : "–";
   QString speedStr = QString::number(std::nearbyint(speed));
   QString setSpeedStr = is_cruise_set ? QString::number(std::nearbyint(setSpeed)) : "–";
+
+  QString enableBsmStr = QVariant(enableBsm).toString();
+  QString rightBsmStr = QVariant(blindRight).toString();
+  QString leftBsmStr = QVariant(blindLeft).toString();
 
   // Draw outer box + border to contain set speed and speed limit
   int default_rect_width = 172;
@@ -620,6 +636,52 @@ void NvgWindow::drawHud(QPainter &p) {
   drawSpeedText(p, rect().center().x(), 210, speedStr, is_brakelight_on ? QColor(0xff, 0, 0, 255) : QColor(0xff, 0xff, 0xff, 255));
   configFont(p, "Inter", 66, "Regular");
   drawText(p, rect().center().x(), 290, speedUnit, 200);
+
+  // BSM debug
+  configFont(p, "Open Sans", 66, "Regular");
+  drawText(p, rect().center().x(), rect().center().y(), enableBsmStr);
+  drawText(p, rect().center().x() + 200, rect().center().y(), rightBsmStr);
+  drawText(p, rect().center().x() - 200, rect().center().y(), leftBsmStr);
+
+  if (blinkLeft) {
+    QRect r = QRect(1, 0, 200, rect().height());
+    // p.drawRect(r);
+
+    QLinearGradient g(r.right(), 0, r.left(), 0);
+    if (blindLeft) {
+      g.setColorAt(0, QColor::fromRgbF(1, 0, 0, 0.05));
+      g.setColorAt(1, QColor::fromRgbF(1, 0, 0, 0.7));
+    }
+    else {
+      g.setColorAt(0, QColor::fromRgbF(0, 1, 0, 0.05));
+      g.setColorAt(1, QColor::fromRgbF(0, 1, 0, 0.7));
+    }
+
+    // p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    p.setBrush(QBrush(g));
+    p.fillRect(r, g);
+    // p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+  }
+
+  if (blinkRight) {
+    QRect r = QRect(rect().width() - 200, 0, 200, rect().height());
+    // p.drawRect(r);
+
+    QLinearGradient g(r.left(), 0, r.right(), 0);
+    if (blindRight) {
+      g.setColorAt(0, QColor::fromRgbF(1, 0, 0, 0.05));
+      g.setColorAt(1, QColor::fromRgbF(1, 0, 0, 0.7));
+    }
+    else {
+      g.setColorAt(0, QColor::fromRgbF(0, 1, 0, 0.05));
+      g.setColorAt(1, QColor::fromRgbF(0, 1, 0, 0.7));
+    }
+
+    // p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    p.setBrush(QBrush(g));
+    p.fillRect(r, g);
+    // p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+  }
 
   int rn_btn = 0;
   if (showDebugUI && !roadName.isEmpty()) rn_btn = 30;
