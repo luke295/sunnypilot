@@ -87,6 +87,12 @@ class NvgWindow : public CameraViewWidget {
   Q_PROPERTY(int gapAdjustCruiseMode MEMBER gapAdjustCruiseMode);
   Q_PROPERTY(int carMake MEMBER carMake);
 
+  Q_PROPERTY(bool enableBsm MEMBER enableBsm);
+  Q_PROPERTY(bool blindRight MEMBER blindRight);
+  Q_PROPERTY(bool blindLeft MEMBER blindLeft);
+  Q_PROPERTY(bool blinkRight MEMBER blinkRight);
+  Q_PROPERTY(bool blinkLeft MEMBER blinkLeft);
+
 public:
   explicit NvgWindow(VisionStreamType type, QWidget* parent = 0);
   void updateState(const UIState &s);
@@ -180,6 +186,12 @@ private:
   int speedLimitStyle;
   int gapAdjustCruiseMode;
   int carMake;
+
+  bool enableBsm;
+  bool blindRight;
+  bool blindLeft;
+  bool blinkRight;
+  bool blinkLeft;
 
 protected:
   void paintGL() override;
