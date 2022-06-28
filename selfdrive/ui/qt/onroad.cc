@@ -638,14 +638,13 @@ void NvgWindow::drawHud(QPainter &p) {
   drawText(p, rect().center().x(), 290, speedUnit, 200);
 
   // BSM debug
-  configFont(p, "Open Sans", 66, "Regular");
-  drawText(p, rect().center().x(), rect().center().y(), enableBsmStr);
-  drawText(p, rect().center().x() + 200, rect().center().y(), rightBsmStr);
-  drawText(p, rect().center().x() - 200, rect().center().y(), leftBsmStr);
+  // configFont(p, "Open Sans", 66, "Regular");
+  // drawText(p, rect().center().x(), rect().center().y(), enableBsmStr);
+  // drawText(p, rect().center().x() + 200, rect().center().y(), rightBsmStr);
+  // drawText(p, rect().center().x() - 200, rect().center().y(), leftBsmStr);
 
   if (blinkLeft) {
     QRect r = QRect(1, 0, 200, rect().height());
-    // p.drawRect(r);
 
     QLinearGradient g(r.right(), 0, r.left(), 0);
     if (blindLeft) {
@@ -657,15 +656,12 @@ void NvgWindow::drawHud(QPainter &p) {
       g.setColorAt(1, QColor::fromRgbF(0, 1, 0, 0.7));
     }
 
-    // p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     p.setBrush(QBrush(g));
     p.fillRect(r, g);
-    // p.setCompositionMode(QPainter::CompositionMode_SourceOver);
   }
 
   if (blinkRight) {
     QRect r = QRect(rect().width() - 200, 0, 200, rect().height());
-    // p.drawRect(r);
 
     QLinearGradient g(r.left(), 0, r.right(), 0);
     if (blindRight) {
@@ -677,10 +673,8 @@ void NvgWindow::drawHud(QPainter &p) {
       g.setColorAt(1, QColor::fromRgbF(0, 1, 0, 0.7));
     }
 
-    // p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     p.setBrush(QBrush(g));
     p.fillRect(r, g);
-    // p.setCompositionMode(QPainter::CompositionMode_SourceOver);
   }
 
   int rn_btn = 0;
