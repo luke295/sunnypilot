@@ -84,3 +84,7 @@ selfdrive/modeld/models/*.thneed
 build/
 
 !**/.gitkeep
+
+opendbc/**
+rednose/**
+
