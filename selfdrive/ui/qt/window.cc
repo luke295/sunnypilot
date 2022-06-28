@@ -56,6 +56,9 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
   QFontDatabase::addApplicationFont("../assets/fonts/Inter-Regular.ttf");
   QFontDatabase::addApplicationFont("../assets/fonts/Inter-SemiBold.ttf");
   QFontDatabase::addApplicationFont("../assets/fonts/Inter-Thin.ttf");
+  QFontDatabase::addApplicationFont("../assets/fonts/NotoSansCJKtc-Bold.otf");
+  QFontDatabase::addApplicationFont("../assets/fonts/NotoSansCJKtc-Medium.otf");
+  QFontDatabase::addApplicationFont("../assets/fonts/NotoSansCJKtc-Regular.otf");
 
   // no outline to prevent the focus rectangle
   setStyleSheet(R"(
