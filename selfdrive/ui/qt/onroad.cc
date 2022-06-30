@@ -1334,6 +1334,28 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
     painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
   }
 
+  // blindspot
+  if (blinkLeft) {
+    if (blindLeft) {
+      painter.setBrush(QColor::fromRgbF(1.0, 0.0, 0.0, std::clamp<float>(scene.lane_blindspot_probs[0], 0.2, 0.7)));
+      painter.drawPolygon(scene.lane_blindspot_vertices[0].v, scene.lane_blindspot_vertices[0].cnt);
+    }
+    else {
+      painter.setBrush(QColor::fromRgbF(0.0, 1.0, 0.0, std::clamp<float>(scene.lane_blindspot_probs[0], 0.2, 0.7)));
+      painter.drawPolygon(scene.lane_blindspot_vertices[0].v, scene.lane_blindspot_vertices[0].cnt);
+    }
+  }
+  if (blinkRight) {
+    if (blindRight) {
+      painter.setBrush(QColor::fromRgbF(1.0, 0.0, 0.0, std::clamp<float>(scene.lane_blindspot_probs[1], 0.2, 0.7)));
+      painter.drawPolygon(scene.lane_blindspot_vertices[1].v, scene.lane_blindspot_vertices[1].cnt);
+    }
+    else {
+      painter.setBrush(QColor::fromRgbF(0.0, 1.0, 0.0, std::clamp<float>(scene.lane_blindspot_probs[1], 0.2, 0.7)));
+      painter.drawPolygon(scene.lane_blindspot_vertices[1].v, scene.lane_blindspot_vertices[1].cnt);
+    }
+  }
+
   // road edges
   for (int i = 0; i < std::size(scene.road_edge_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 0, 0, std::clamp<float>(1.0 - scene.road_edge_stds[i], 0.0, 1.0)));
